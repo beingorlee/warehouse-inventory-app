@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/setupFragment">
+
+    <fragment
+        android:id="@+id/setupFragment"
+        android:name="com.warehouse.inventory.ui.SetupFragment"
+        android:label="仓库设置"
+        tools:layout="@layout/fragment_setup">
+        
+        <action
+            android:id="@+id/action_setupFragment_to_mainFragment"
+            app:destination="@id/mainFragment"
+            app:popUpTo="@id/setupFragment"
+            app:popUpToInclusive="true" />
+            
+    </fragment>
+
+    <fragment
+        android:id="@+id/mainFragment"
+        android:name="com.warehouse.inventory.ui.MainFragment"
+        android:label="库存管理"
+        tools:layout="@layout/fragment_main">
+        
+        <action
+            android:id="@+id/action_mainFragment_to_setupFragment"
+            app:destination="@id/setupFragment"
+            app:popUpTo="@id/mainFragment"
+            app:popUpToInclusive="true" />
+            
+    </fragment>
+
+</navigation>
