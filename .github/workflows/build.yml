@@ -26,26 +26,24 @@ jobs:
     - name: Accept Android SDK licenses
       run: yes | sdkmanager --licenses || true
 
-    - name: Install required Android SDK components
+    - name: Install Android SDK components
       run: |
         sdkmanager "platforms;android-34" "build-tools;34.0.0" "platform-tools"
 
-    - name: Create gradle wrapper jar (workaround)
+    - name: Setup Gradle Wrapper
       run: |
-        mkdir -p gradle/wrapper
-        curl -L https://services.gradle.org/distributions/gradle-8.2-bin.zip -o gradle-8.2-bin.zip
-        unzip -q gradle-8.2-bin.zip
-        ./gradle-8.2/bin/gradle wrapper --gradle-version 8.2
+        # Download gradle wrapper jar if missing
+        if [ ! -f gradle/wrapper/gradle-wrapper.jar ]; then
+          curl -L https://github.com/gradle/gradle/raw/v8.2.0/gradle/wrapper/gradle-wrapper.jar -o gradle/wrapper/gradle-wrapper.jar
+        fi
+        chmod +x gradlew
 
-    - name: Make gradlew executable
-      run: chmod +x ./gradlew
-
-    - name: Build Debug APK (without cache)
-      run: ./gradlew assembleDebug --no-daemon --stacktrace --info
+    - name: Build Debug APK
+      run: ./gradlew assembleDebug --stacktrace --no-daemon
 
     - name: Upload APK
       uses: actions/upload-artifact@v4
       with:
         name: warehouse-inventory-apk
-        path: app/build/outputs/apk/debug/*.apk
+        path: app/build/outputs/apk/debug/app-debug.apk
         retention-days: 30
